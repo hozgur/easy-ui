@@ -1,0 +1,21 @@
+{
+  "name": "easy-ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hozgur/easy-ui.git"
+  },
+  "keywords": [],
+  "author": "hozgur",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hozgur/easy-ui/issues"
+  },
+  "homepage": "https://github.com/hozgur/easy-ui#readme"
+}
