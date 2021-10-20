@@ -34,6 +34,9 @@
 .right {
     justify-content: flex-end;
 }
+.center {
+    justify-content: center;
+}
 .dark {
     background-color: #444;
     color: #fff;
@@ -65,25 +68,25 @@ label {
     padding: 4px 2px 0px 2px;
     text-align: right;
 }
-.m2 { width: 2rem; }
-.m3 { width: 3rem; }
-.m4 { width: 4rem; }
-.m5 { width: 5rem; }
-.m6 { width: 6rem; }
-.m7 { width: 7rem; }
-.m8 { width: 8rem; }
-.m9 { width: 9rem; }
-.m10 { width: 10rem; }
-.m11 { width: 11rem; }
-.m12 { width: 12rem; }
-.m13 { width: 13rem; }
-.m14 { width: 14rem; }
-.m15 { width: 15rem; }
-.m16 { width: 16rem; }
-.m17 { width: 17rem; }
-.m18 { width: 18rem; }
-.m19 { width: 19rem; }
-.m20 { width: 20rem; }
+.w2 { width: 2rem; }
+.w3 { width: 3rem; }
+.w4 { width: 4rem; }
+.w5 { width: 5rem; }
+.w6 { width: 6rem; }
+.w7 { width: 7rem; }
+.w8 { width: 8rem; }
+.w9 { width: 9rem; }
+.w10 { width: 10rem; }
+.w11 { width: 11rem; }
+.w12 { width: 12rem; }
+.w13 { width: 13rem; }
+.w14 { width: 14rem; }
+.w15 { width: 15rem; }
+.w16 { width: 16rem; }
+.w17 { width: 17rem; }
+.w18 { width: 18rem; }
+.w19 { width: 19rem; }
+.w20 { width: 20rem; }
 
 
 .p1 { padding: 1px; }

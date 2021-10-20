@@ -1,5 +1,3 @@
-//import { dump } from "js-yaml";
-
 import { elements } from "./elements.js";
 
 function spaces(text) {    
@@ -83,8 +81,8 @@ function process3(tree) {
                         html+= ` ${key}="${value}"`;
                 }
                 else {
-                    if(key.startsWith('m'))
-                        classes += ` ${key}`;
+                    if(key.startsWith('c_'))
+                        classes += ` ${key.substring(2)}`;
                     else
                         innerHTML += `${key.replace(/_/g," ")}`;
                 }
@@ -118,7 +116,7 @@ function parse(layout) {
     return html;
 }
 
-export class dialog {
+class dialog {
     init(layout,appid) {
         this.layout = layout;
         this.appid = appid;
@@ -139,4 +137,7 @@ export class dialog {
 }
 
 
-export { parse };
+export {
+    parse,
+    dialog
+};
