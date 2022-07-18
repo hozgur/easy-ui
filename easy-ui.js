@@ -8,12 +8,13 @@ function spaces(text) {
 }
 
 function findOneOf(str,list,start) {
+    let found = [];
     for(let i = 0; i < list.length; i++) {
         const j = str.indexOf(list[i],start);
         if(j != -1)
-            return {listIndex:i,index:j};
+            found.push( { listIndex:i, index:j } );
     }
-    return null;
+    return found.sort((a,b) => a.index - b.index)[0];
 }
 
 function findPairs(str,begin, end) {
