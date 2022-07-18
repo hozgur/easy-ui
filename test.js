@@ -1,18 +1,18 @@
 
-import {dialog} from './index.js';
+import {easyUI} from './easy-ui.js';
 
-const app = new dialog();
+const app = new easyUI();
 
 window.app = app;
 
 const layout = `
 row
-    panel c_p4
-        h3 Hello_World
-    panel c_p4
-        row c_w8 c_center
+    panel .p4
+        h3 .p4 { Hello_World }
+    panel .p4
+        row .w8 .center
             h3 from_Easy-UI
-        row c_right c_w8
+        row .right .w8
             button Test_Button onclick=app.test_button()
             
 
