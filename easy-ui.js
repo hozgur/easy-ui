@@ -7,6 +7,30 @@ function spaces(text) {
     return 0;
 }
 
+function findOneOf(str,list) {
+    for(let i = 0; i < list.length; i++) {
+        const j = str.indexOf(list[i]);
+        if(j != -1)
+            return {listIndex:i,index:j};
+    }
+    return null;
+}
+
+function findPairs(str,begin, end) {
+    let pairs = [];
+    let i = 0;
+    while(true) {
+    let j = str.findOneOf(begin,i);
+    if(j == null) break;
+    let k = str.indexOf(end[j.listIndex],j.index+1);
+    if(k == -1) break;
+    pairs.push({listIndex:j.listIndex, begin:j.index, end:k});
+    i = k+1;
+    }
+    return pairs;
+}
+
+
 // *****************************************************************************************************
 // process1
 // Get string and return list of lines and spaces
@@ -30,9 +54,9 @@ function process1(layout) {
 
 // *****************************************************************************************************
 // process2
-// Get list of lines and return tree
+// Get list of lines and return root tree
 function process2(list) {
-    const root = {space: -1, name:'dialog', parent:null, children: []};
+    const root = {space: -1, name:'root', parent:null, children: []};
     let last_node = root;
     for(const node of list) {
         if(node.space == last_node.space) {
@@ -81,8 +105,8 @@ function process3(tree) {
                         html+= ` ${key}="${value}"`;
                 }
                 else {
-                    if(key.startsWith('c_'))
-                        classes += ` ${key.substring(2)}`;
+                    if(key.startsWith('.'))
+                        classes += ` ${key.substring(1)}`;
                     else
                         innerHTML += `${key.replace(/_/g," ")}`;
                 }
@@ -116,7 +140,7 @@ function parse(layout) {
     return html;
 }
 
-class dialog {
+class easyUI {
     init(layout,appid) {
         this.layout = layout;
         this.appid = appid;
@@ -136,8 +160,13 @@ class dialog {
     }    
 }
 
+function test() {
+    let sampleLine = "row .w8 .center class={ testValue } .{ testClass } { testText } ";
+
+}
 
 export {
     parse,
-    dialog
+    easyUI,
+    test
 };
