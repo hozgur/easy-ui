@@ -7,9 +7,9 @@ function spaces(text) {
     return 0;
 }
 
-function findOneOf(str,list) {
+function findOneOf(str,list,start) {
     for(let i = 0; i < list.length; i++) {
-        const j = str.indexOf(list[i]);
+        const j = str.indexOf(list[i],start);
         if(j != -1)
             return {listIndex:i,index:j};
     }
@@ -19,15 +19,27 @@ function findOneOf(str,list) {
 function findPairs(str,begin, end) {
     let pairs = [];
     let i = 0;
-    while(true) {
-    let j = str.findOneOf(begin,i);
-    if(j == null) break;
-    let k = str.indexOf(end[j.listIndex],j.index+1);
-    if(k == -1) break;
-    pairs.push({listIndex:j.listIndex, begin:j.index, end:k});
-    i = k+1;
+    while(i < str.length) {
+        let j = findOneOf(str,begin,i);
+        if(j == null) break;
+        let k = str.indexOf(end[j.listIndex],j.index+1);
+        if(k == -1) break;
+        pairs.push({listIndex:j.listIndex, begin:j.index, end:k});
+        i = j.index+1;
     }
     return pairs;
+}
+
+
+function test() {
+    let sampleLine = "row .w8 .center class={ 'testValue' } .{ testClass } { testText } ";
+    let begins = "{'(";
+    let ends = "}')";
+    let list = findPairs(sampleLine,begins,ends);
+    console.log(list);
+    for(const pair of list)
+        console.log(sampleLine.substring(pair.begin+1,pair.end));
+
 }
 
 
@@ -158,11 +170,6 @@ class easyUI {
             console.log(`app element ${elementId} not found`);
         }
     }    
-}
-
-function test() {
-    let sampleLine = "row .w8 .center class={ testValue } .{ testClass } { testText } ";
-
 }
 
 export {
