@@ -24,18 +24,21 @@ function findPairs(str,begin, end) {
         let j = findOneOf(str,begin,i);
         if(j == null) break;
         let k = str.indexOf(end[j.listIndex],j.index+1);
-        if(k == -1) break;
-        pairs.push({listIndex:j.listIndex, begin:j.index, end:k});
-        i = j.index+1;
+        if(k != -1) {
+            pairs.push({listIndex:j.listIndex, begin:j.index, end:k});
+            i = k+1;
+        }
+        else
+            i = j.index+1;
     }
     return pairs;
 }
 
 
 function test() {
-    let sampleLine = "row .w8 .center class={ 'testValue' } .{ testClass } { testText } ";
-    let begins = "{'(";
-    let ends = "}')";
+    let sampleLine = "row .w8 .center class=\" 'testValue' \" .{ testClass } { testText } ";
+    let begins = "{'\"(";
+    let ends = "}'\")";
     let list = findPairs(sampleLine,begins,ends);
     console.log(list);
     for(const pair of list)
