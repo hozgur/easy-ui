@@ -1,6 +1,6 @@
 import { elements } from "./elements.js";
 
-function spaces(text) {    
+function calcIndent(text) {    
     for(let i = 0; i < text.length; i++)
         if(text[i] != ' ')
             return parseInt((i+2)/4);
@@ -34,15 +34,38 @@ function findPairs(str,begin, end) {
     return pairs;
 }
 
+function replaceSpaceswithPlaceholder(txt,pairs,replaceChar = "\u001F") {
+    let result = txt;
+    result = result.substring(0,pairs[0].begin);
+    for(let i = 0; i < pairs.length; i++) {
+        const str = txt.substring(pairs[i].begin,pairs[i].end+1).replace(/ /g,replaceChar);
+        console.log(str);
+        result += str;
+        result += txt.substring(pairs[i].end+1,pairs[i+1]?pairs[i+1].begin:txt.length);
+    }
+    return result;
+}
+
+function replacePlaceholderwithSpace(txt,replaceChar = "\u001F") {
+    return txt.replace(new RegExp(`${replaceChar}`, 'g'),' ');
+}
+
+const tokenize = (str) => str.split(/\s+/);
 
 function test() {
-    let sampleLine = "row .w8 .center class=\" 'testValue' \" .{ testClass } { testText } ";
+    let sampleLine = "row  .w8 .center class=\" 'testValue' \" .{ testClass } { testText } ";
     let begins = "{'\"(";
     let ends = "}'\")";
     let list = findPairs(sampleLine,begins,ends);
     console.log(list);
-    for(const pair of list)
-        console.log(sampleLine.substring(pair.begin+1,pair.end));
+    let line = replaceSpaceswithPlaceholder(sampleLine,list);
+    let line2 = tokenize(line);
+    let line3 = line2.map(x => replacePlaceholderwithSpace(x));
+    console.log(sampleLine);
+    console.log(line);
+    console.log(line2);
+    console.log(line3);
+    
 
 }
 
@@ -57,7 +80,7 @@ function process1(layout) {
         //const line = rawline.split('#')[0];
         const line = rawline;
         if(line.trim() == '') continue;
-        const space = spaces(line);
+        const space = calcIndent(line);
         const attributes = line.trim().split(' ');
         const name = attributes[0];
         let props = null;
