@@ -1,5 +1,5 @@
 
-export let elements = {
+const elements = {
     // The elements
     'dialog':      {
         'start_tag': "<div>",
@@ -22,3 +22,7 @@ export let elements = {
         'classes':     "panel",
     }
 };
+
+module.exports = {
+    elements
+}   // The elements

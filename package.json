@@ -2,11 +2,16 @@
   "name": "@hozgur/easy-ui",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "easy-ui.js",
   "type": "module",
+  "jest": {
+    "transform": {},
+    "testEnvironment": "jest-environment-node"
+    
+  },
   "scripts": {
-    "test": "node test.js",
-    "_test": "node _test.js"
+    "sample": "node sample.js",
+    "test": "jest --maxWorkers=50%"
   },
   "repository": {
     "type": "git",
@@ -18,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/hozgur/easy-ui/issues"
   },
-  "homepage": "https://github.com/hozgur/easy-ui#readme"
+  "homepage": "https://github.com/hozgur/easy-ui#readme",
+  "devDependencies": {
+    "jest": "^28.1.3"
+  }
 }

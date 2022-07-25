@@ -1,4 +1,4 @@
-import { elements } from "./elements.js";
+const elements = require('./elements.js');
 
 function calcIndent(text) {    
     for(let i = 0; i < text.length; i++)
@@ -15,6 +15,46 @@ function findOneOf(str,list,start) {
             found.push( { listIndex:i, index:j } );
     }
     return found.sort((a,b) => a.index - b.index)[0];
+}
+
+function findCodeBlocks(str) {
+    let found = [];
+    let start = 0;
+    while(start != -1) {
+        const j = str.indexOf('{',start);
+        if(j != -1) {
+            const k = str.indexOf('}',j);
+            if(k != -1) {
+                found.push( { start:j, end:k } );
+                start = k+1;
+            }
+            else
+                start = j+1;
+        }
+        else
+            start = -1;
+    }
+    return found;
+}
+
+function findStrings(str) {
+    let found = [];
+    let start = 0;
+    while(start != -1) {
+        const j = str.indexOf('"',start);
+        if(j != -1) {
+            const k = str.indexOf('"',j+1);
+            if(k != -1) {
+                found.push( { start:j, end:k } );
+                start = k+1;
+            }
+            else
+                start = j+1;
+        }
+        else
+            start = -1;
+    }
+    return found;
 }
 
 function findPairs(str,begin, end) {
@@ -50,23 +90,42 @@ function replacePlaceholderwithSpace(txt,replaceChar = "\u001F") {
     return txt.replace(new RegExp(`${replaceChar}`, 'g'),' ');
 }
 
+function removeWhiteSpace(str) {
+    return str.replace(/\s+/g, ' ');
+}
+
+// remove spaces around the equal sign
+function trimEquals(str) {
+    return str.replace(/\s*=\s*/g,'=');
+}
+
 const tokenize = (str) => str.split(/\s+/);
 
-function test() {
-    let sampleLine = "row  .w8 .center class=\" 'testValue' \" .{ testClass } { testText } ";
-    let begins = "{'\"(";
-    let ends = "}'\")";
-    let list = findPairs(sampleLine,begins,ends);
-    console.log(list);
-    let line = replaceSpaceswithPlaceholder(sampleLine,list);
-    let line2 = tokenize(line);
-    let line3 = line2.map(x => replacePlaceholderwithSpace(x));
-    console.log(sampleLine);
-    console.log(line);
-    console.log(line2);
-    console.log(line3);
+function tokenizeLine(line) {
     
+    let begins = "{'\"";
+    let ends = "}'\"";
+    line = removeWhiteSpace(line);
+    line = trimEquals(line);
+    let codeBlocks = findCodeBlocks(line);
+    let pairs = findPairs(line,begins,ends);    
+    let pairswithoutSpaces = replaceSpaceswithPlaceholder(trimmedSpaces,pairs);
+    let tokens = tokenize(pairswithoutSpaces);
+    return tokens.map(x => replacePlaceholderwithSpace(x)).filter(x => x != '');
+}
 
+function tokenizeElement(line) {
+    line = removeWhiteSpace(line);
+    line = trimEquals(line);
+    const name = line.split(' ')[0];
+    let props = line.split(' ').slice(1);
+    props = props.map(x => x[0] == "."?"class="+x.substring(1):x[0] == "#"?"id="+x.substring(1):"content="+x);
+    props.forEach(x => console.log(x));
+    props.forEach( (prop) => {
+        const [key,value] = prop.split('=');
+        console.log(key,value);
+    });
+    return {name,props};
 }
 
 
@@ -199,8 +258,8 @@ class easyUI {
     }    
 }
 
-export {
+module.exports =  {
     parse,
     easyUI,
-    test
+    tokenizeElement
 };
