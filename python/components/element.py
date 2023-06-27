@@ -68,7 +68,7 @@ class Element:
         return self
     def render(self):
         class_str = " ".join(self.classes)
-        str = f"<{self.name} class={class_str} style='{self.styles}'> {self.value}"
+        str = f"<{self.name} class={class_str} style='{self.styles if self.styles is not None else ''}'> {self.value if self.value is not None else ''}"
         for child in self.children:
             str += child.render()
         str += f"</{self.name}>"

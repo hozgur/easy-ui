@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>    
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="myapp" class="p3 ">
+        <div class="border dark w16 h8 p3">
+            <div class="row">
+                <label class="w3" for="A">A:</label>
+                <input class="w8 dark" type="text" id="A" name="myText" placeholder="value here" onchange="my_onchange(event)">
+            </div>
+            <div class="row">
+                <label class="w3" for="mySliderA">A:</label>
+                <input type="range" min="1" max="100" value="50" id="mySliderA" onchange="my_onchange(event)">
+            </div>
+            <div class="row">                
+                <label class="w3" for="B">B:</label>
+                <input class="w8 dark" type="text" id="B" name="myText" placeholder="value here" onchange="my_onchange()">
+            </div>
+            <div class="row">                
+                <label class="w3" for="result">Result:</label>
+                <input class="w8 dark" type="text" id="result" name="myText">
+            </div>
+        </div>
+    </div>
+    <script src="app_test.js"></script>
+</body>
+</html>
