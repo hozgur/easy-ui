@@ -2,7 +2,7 @@
 root = None
 cur_parent = None
 old_parent = None
-
+functions = []
 class Element:
     def __init__(self,id = None,value = None):
         global root, cur_parent
@@ -46,20 +46,11 @@ class Element:
         old_parent = None
         
     def __str__(self):
-        depth = 0
-        element = self
-        while element.parent:
-            depth += 1
-            element = element.parent
-        str = "-" * depth * 4
-        str += f"{self.name}: {self.value}"
-        if self.styles:
-            str += f" style={self.styles},"
-        if len(self.events) > 0:
-            str += f" events={self.events.keys()}"
-        for child in self.children:
-            str += "\n" + child.__str__()
-        return str
+        return self.render()
+    def cls(self,class_name):
+        self.classes.append(class_name)
+        return self
+
     def style(self,style):
         self.styles = style
         return self    
@@ -68,7 +59,13 @@ class Element:
         return self
     def render(self):
         class_str = " ".join(self.classes)
-        str = f"<{self.name} class={class_str} style='{self.styles if self.styles is not None else ''}'> {self.value if self.value is not None else ''}"
+        str = f"<{self.name} class='{class_str}'"
+        str += f"style='{self.styles if self.styles is not None else ''}'"        
+        for event_name, action in self.events.items():            
+            if event_name == "change":
+                str += f"onchange='changeHandler(this.value)'"
+        str +=">"
+        str +=f"{self.value if self.value is not None else ''}"
         for child in self.children:
             str += child.render()
         str += f"</{self.name}>"

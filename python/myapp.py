@@ -1,13 +1,21 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
+from flask_socketio import SocketIO, send, emit
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 app.debug = True
 CORS(app)
 
 import ui
 
 ui_src = ui.UI()
+
+@socketio.on('from_client')
+def handle_from_client(json):
+    print('Received value: ' + str(json['value']) + ' from client id ' + str(json['id']))
+    # You can also set your variable here if you want
+    # my_class_instance.my_var = json['value']
 
 @app.route('/')
 def home():

@@ -5,5 +5,10 @@ class Input(Element):
         
     def render(self):
         class_str = " ".join(self.classes)
-        return f"<input type='text' id='{self.id}' class='{class_str}' value='{self.value}'/>"
+        str = f"<input type='text' id='{self.id}' class='{class_str}' value='{self.value}'"
+        for event_name, action in self.events.items():            
+            if event_name == "change":
+                str += f"onchange='changeHandler(this.value)'"
+        str += "/>"
+        return str
         
