@@ -4,14 +4,19 @@ root = None
 cur_parent = None
 old_parent = None
 elements = {}
-
+created = False
 def clientHandler(id, value,event_name):
     global elements
-    if id in elements:
-        elm = elements[id]
-        if elm is not None:            
-            if event_name in elm.events:
-                elm.events[event_name](id, value)
+    if id == "myapp":
+        if value == "init":
+            created = True
+            print("Client connected")
+    else:
+        if id in elements:
+            elm = elements[id]
+            if elm is not None:            
+                if event_name in elm.events:
+                    elm.events[event_name](id, value)
 
 connection.clientHandler = clientHandler
 
@@ -30,7 +35,7 @@ class Element:
         self._value = value
         self.children = []
         self.events = {}
-        self.styles = None
+        self.styles = []
         self.classes = []
         self.parent = None
         if id is not None:
@@ -53,7 +58,7 @@ class Element:
     @value.setter
     def value(self, value):
         self._value = value
-        connection.send(self.id, value)
+        connection.send(self.id, value, "change")
 
     def add_child(self, child):        
         self.children.append(child)
@@ -62,6 +67,7 @@ class Element:
         global cur_parent, old_parent
         old_parent = cur_parent
         cur_parent = self
+        self.children = []
         return self
     
     def __exit__(self, type, value, traceback):        
@@ -86,9 +92,12 @@ class Element:
     
     
     def render(self):
+        str = f"<{self.name} id='{self.id}'"
         class_str = " ".join(self.classes)
-        str = f"<{self.name} class='{class_str}'"
-        str += f"style='{self.styles if self.styles is not None else ''}'"        
+        if(len(class_str) > 0):
+            str += f"class='{class_str}'"
+        if len(self.styles) > 0:
+            str += f"style='{self.styles if self.styles is not None else ''}'"        
         for event_name, action in self.events.items():
             str += f"on{event_name}='clientEmit(this.id,this.value,\"{event_name}\")'"
         str +=">"

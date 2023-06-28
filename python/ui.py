@@ -5,6 +5,18 @@ from components.input import Input
 from components.label import Label
 from components.element import Element, Elm
 from components.slider import Slider
+from components.button import Button
+import connection
+def onclick(id, value):
+    print(f"Button {id} clicked")
+    with Row(id="rowB") as row:
+        Label(usefor="b",value="B:")
+        Input(id="b",value="0")
+        Slider(id="bs",value="0").on("change", onchangeSlider)
+    connection.send("rowB", row.render(), "init")
+        
+
+
 
 def onchange(id, value):
     print(f"Value of {id} changed to {value}")
@@ -35,17 +47,18 @@ with Element() as main:
         Label(usefor="a",value="A:")
         Input(id="a",value="0").on("change", onchange)
     with Row() as row:
-        
         Label(usefor="as",value="A:")
         Slider(id="as",value="0").on("change", onchangeSlider)
     with Row() as row:
-        
+        row.id = "rowB"
         Label(usefor="b",value="B:")
         Input(id="b",value="0")
-    with Row() as row:
-        
+    with Row() as row:        
         Label(usefor="c",value="C:")
         Input(id="c",value="0")
+    with Row() as row:            
+        Button(id="btn1",value="Click me").on("click", onclick)
+
 
 def UI():
     return main.render()

@@ -7,21 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test 1Document</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.0/socket.io.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
-        socket.on('from_server', function(data) {
-            document.getElementById(data.id)["value"] = data.value;
-        });
-
-        function clientEmit(id,newValue,event_name) {
-            socket.emit('from_client', {id: id, value: newValue, event_name: event_name});
-        }
-    </script>
+    <script src="app.js" type="module"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div id="myapp"></div>
-    <script src="app.js" type="module"></script>
+    <div id="myapp"></div>    
 </body>
 </html>

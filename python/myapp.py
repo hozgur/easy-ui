@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_socketio import SocketIO, send, emit
 import connection
+import os
 app = Flask(__name__)
 socketio = SocketIO(app)
 connection.socket = socketio
@@ -22,6 +23,18 @@ def handle_from_client(json):
 @app.route('/')
 def home():
     return send_from_directory("output", "index.html")
+
+@app.route('/images')
+def image():
+    image_names = os.listdir('./images/')
+    images = [{'name': n, 'url': os.path.join('images', n)} for n in image_names]
+    return str(images)  # just returning the string representation of list for testing
+
+
+@app.route('/images/<int:index>')
+def image():
+    return send_from_directory("images", "index.html")
+
 
 @app.route('/<path:path>')
 def files(path):
