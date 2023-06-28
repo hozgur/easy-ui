@@ -9,12 +9,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.0/socket.io.js"></script>
     <script type="text/javascript" charset="utf-8">
         var socket = io.connect('http://' + document.domain + ':' + location.port);
-        socket.on('my_var_changed', function(data) {
-            document.getElementById('myDiv').textContent = 'my_var changed to ' + data.new_value;
+        socket.on('from_server', function(data) {
+            document.getElementById(data.id)["value"] = data.value;
         });
 
-        function changeHandler(id,newValue) {
-            socket.emit('from_client', {id: id, value: newValue});
+        function clientEmit(id,newValue,event_name) {
+            socket.emit('from_client', {id: id, value: newValue, event_name: event_name});
         }
     </script>
     <link rel="stylesheet" href="style.css">
