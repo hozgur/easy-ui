@@ -6,58 +6,48 @@ from components.label import Label
 from components.element import Element, Elm
 from components.slider import Slider
 from components.button import Button
+from components.image import Image
 import connection
-def onclick(id, value):
-    print(f"Button {id} clicked")
-    with Row(id="rowB") as row:
-        Label(usefor="b",value="B:")
-        Input(id="b",value="0")
-        Slider(id="bs",value="0").on("change", onchangeSlider)
-    connection.send("rowB", row.render(), "init")
-        
+def onimageclick(id, value):
+    print(f"Image {id} clicked")
+    img = Elm("img")
+    if img is not None:
+        img.value = value
 
-
-
-def onchange(id, value):
-    print(f"Value of {id} changed to {value}")
 
 def onchangeSlider(id, value):
     print(f"Slider Value of {id} changed to {value}")
-    a = Elm("a")
+    a = Elm("a") if id == "as" else Elm("as")
     if a is not None:
         a.value = value
-    calc()
+    with Row(id="imagerow") as imagerow:
+        imagerow.cls("container").cls("border").style("flex-wrap:wrap").style("width:100%")
+        for i in range(0,int(value)):
+            Image(id=f"img{i}",value= f"./image/{i}").on("click", onimageclick)
+    connection.send("imagerow", imagerow.render(), "init-content")
+ 
+    
 
-def calc():
-    a = Elm("a")
-    b = Elm("b")
-    c = Elm("c")
-    if a is not None and b is not None and c is not None:
-        vala = float(a.value)
-        valb = float(b.value)
-        valc = vala + valb
-        c.value = str(valc)
-        
-
-
-with Element() as main:
-    main.cls("container").cls("w14").cls("border")
-    with Row() as row:
-        
-        Label(usefor="a",value="A:")
-        Input(id="a",value="0").on("change", onchange)
-    with Row() as row:
-        Label(usefor="as",value="A:")
-        Slider(id="as",value="0").on("change", onchangeSlider)
-    with Row() as row:
-        row.id = "rowB"
-        Label(usefor="b",value="B:")
-        Input(id="b",value="0")
-    with Row() as row:        
-        Label(usefor="c",value="C:")
-        Input(id="c",value="0")
-    with Row() as row:            
-        Button(id="btn1",value="Click me").on("click", onclick)
+with Element(id="main") as main:
+    main.cls("container").style("width:100%").style("height:100%")
+    with Row() as row1:
+        row1.cls("container").cls("border")
+        with Col() as col1:
+            col1.cls("w12").cls("border").style("height:50%")
+            with Row() as row:
+                Label(usefor="a",value="Images:")
+                Input(id="a",value="0").on("change", onchangeSlider)
+            Slider(id="as",value="0").on("change", onchangeSlider)
+        with Col() as col2:
+            col2.cls("border").style("height:50%").style("width:auto")
+            img = Image(id="img",value="./image/0")
+            img.style("width:auto").style("height:500px")
+    with Row() as imagerow:
+        imagerow.id = "imagerow"
+        imagerow.cls("container").cls("border").style("flex-wrap:wrap").style("width:100%")
+        for i in range(0,20):
+            Image(id=f"img{i}",value= f"./image/{i}").on("click", onimageclick)
+            
 
 
 def UI():

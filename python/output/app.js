@@ -1,13 +1,13 @@
 
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 socket.on('from_server', function(data) {
-    if(data.event_name == "init"){
+    if(data.event_name == "init-content"){
         var myapp = document.getElementById(data.id);
         myapp.innerHTML = data.value;
     }
-    if(data.event_name == "change"){
+    if(data.event_name.startsWith("change-")){
         var elm = document.getElementById(data.id);
-        elm.value = data.value;
+        elm[data.event_name.split("-")[1]] = data.value;
     }
 });
 

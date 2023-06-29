@@ -38,6 +38,7 @@ class Element:
         self.styles = []
         self.classes = []
         self.parent = None
+        self.value_name = "value"
         if id is not None:
             elements[id] = self
 
@@ -58,22 +59,20 @@ class Element:
     @value.setter
     def value(self, value):
         self._value = value
-        connection.send(self.id, value, "change")
+        connection.send(self.id, value, "change-"+self.value_name)
 
     def add_child(self, child):        
         self.children.append(child)
 
     def __enter__(self):        
-        global cur_parent, old_parent
-        old_parent = cur_parent
+        global cur_parent
         cur_parent = self
         self.children = []
         return self
     
     def __exit__(self, type, value, traceback):        
-        global cur_parent, old_parent
-        cur_parent = old_parent
-        old_parent = None
+        global cur_parent
+        cur_parent = self.parent
         
     def __str__(self):
         return self.render()
@@ -83,7 +82,7 @@ class Element:
         return self
 
     def style(self,style):
-        self.styles = style
+        self.styles.append(style)
         return self
     
     def on(self,event_name,action):
@@ -96,8 +95,9 @@ class Element:
         class_str = " ".join(self.classes)
         if(len(class_str) > 0):
             str += f"class='{class_str}'"
-        if len(self.styles) > 0:
-            str += f"style='{self.styles if self.styles is not None else ''}'"        
+        style_str = "; ".join(self.styles)
+        if(len(style_str) > 0):
+            str += f'style="{style_str}"'
         for event_name, action in self.events.items():
             str += f"on{event_name}='clientEmit(this.id,this.value,\"{event_name}\")'"
         str +=">"
