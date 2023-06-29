@@ -11,6 +11,7 @@ def clientHandler(id, value,event_name):
         if value == "init":
             created = True
             print("Client connected")
+            connection.flush_send_queue()
     else:
         if id in elements:
             elm = elements[id]
@@ -28,31 +29,34 @@ def Elm(id):
         return None
 
 class Element:
-    def __init__(self,id = None,value = None):
+    def __init__(self,id = None,value = None,auto_bind = True):
         global root, cur_parent
-        self.name = "div"
+        self.tag = "div"
         self.id = id
         self._value = value
         self.children = []
         self.events = {}
-        self.styles = []
+        self.styles = {}
         self.classes = []
+        self.attrs = {}
         self.parent = None
         self.value_name = "value"
+        self.has_content = True
         if id is not None:
             elements[id] = self
 
-        if root is None:
-            root = self
-            cur_parent = self
-            self.parent = None
-        else:
-            if cur_parent is not None:
-                self.parent = cur_parent
-                cur_parent.add_child(self)
-            else:
-                self.parent = None
+        if auto_bind:
+            if root is None:
+                root = self
                 cur_parent = self
+                self.parent = None
+            else:
+                if cur_parent is not None:
+                    self.parent = cur_parent
+                    cur_parent.add_child(self)
+                else:
+                    self.parent = None
+                    cur_parent = self
     @property
     def value(self):
         return self._value
@@ -81,8 +85,8 @@ class Element:
         self.classes.append(class_name)
         return self
 
-    def style(self,style):
-        self.styles.append(style)
+    def style(self,style,value):
+        self.styles[style] = value
         return self
     
     def on(self,event_name,action):
@@ -91,18 +95,30 @@ class Element:
     
     
     def render(self):
-        str = f"<{self.name} id='{self.id}'"
+        str = f"<{self.tag}"
+        if self.id is not None:
+            str += f" id='{self.id}'"
         class_str = " ".join(self.classes)
         if(len(class_str) > 0):
-            str += f"class='{class_str}'"
-        style_str = "; ".join(self.styles)
-        if(len(style_str) > 0):
-            str += f'style="{style_str}"'
+            str += f" class='{class_str}'"
+        if(len(self.styles) > 0):
+            style_str = " style='"
+            for style_name, style_value in self.styles.items():
+                style_str += f" {style_name}:{style_value};"
+            str += style_str + "'"
+        for attr_name, attr_value in self.attrs.items():
+            str += f" {attr_name}='{attr_value}'"
         for event_name, action in self.events.items():
-            str += f"on{event_name}='clientEmit(this.id,this.value,\"{event_name}\")'"
-        str +=">"
-        str +=f"{self.value if self.value is not None else ''}"
-        for child in self.children:
-            str += child.render()
-        str += f"</{self.name}>"
+            str += f" on{event_name}='clientEmit(this.id,this.{self.value_name},\"{event_name}\")'"
+        if self.has_content:
+            str +=">"
+            str +=f"{self.value if self.value is not None else ''}"
+            for child in self.children:
+                str += child.render()
+            str += f"</{self.tag}>"
+        else:
+            if self.value is not None:
+                if(self.value_name is not None):
+                    str +=f' {self.value_name} ="{self.value}"'
+            str += "/>"
         return str

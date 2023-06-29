@@ -9,29 +9,26 @@ connection.socket = socketio
 app.debug = True
 CORS(app)
 
-import ui
+import ui as ui
 
-ui_src = ui.UI()
 
 @socketio.on('from_client')
 def handle_from_client(json):
-    print('Received value: ' + str(json['value']) + ' from client id ' + str(json['id']))
+    print('Received json: ' + str(json))
+    #print('Received value: ' + str(json['value']) + ' from client id ' + str(json['id']))
     connection.clientHandler(json['id'], json['value'], json['event_name'])
     # You can also set your variable here if you want
     # my_class_instance.my_var = json['value']
+
+ui_src = ui.UI()
 
 @app.route('/')
 def home():
     return send_from_directory("output", "index.html")
 
-# print working dir
-print(os.getcwd())
 image_names = os.listdir('./output/images')
 images = [{'name': n, 'url': os.path.join('output/images', n)} for n in image_names]
 
-@app.route('/images')
-def imagelist():
-    return str(images)  # just returning the string representation of list for testing
 
 @app.route('/image/<int:index>')
 def image(index):
@@ -49,13 +46,6 @@ def get_render():
         return jsonify({'result': 'init not called'})
     else:
         return ui_src
-    
-@app.route('/multiply', methods=['POST'])
-def multiply():
-    data = request.get_json()
-    result = data['a'] * data['b']
-    return jsonify({'result': result})
-
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

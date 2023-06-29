@@ -4,8 +4,6 @@ class Label(Element):
         super().__init__(value = value)
         self.classes.append("label")
         self.usefor = usefor
-        
-    def render(self):
-        class_str = " ".join(self.classes)
-        return f"<label class='{class_str}' for='{self.usefor}'>{self.value}</label>"
-    
+        self.tag = "label"
+        self.attrs["for"] = usefor
+        self.has_content = True

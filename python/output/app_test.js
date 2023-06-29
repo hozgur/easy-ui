@@ -8,3 +8,11 @@ function my_onchange(event) {
     console.log(c);    
     document.getElementById("result").value = c.toString();
 }
+
+window.onload = function () {
+    src = {
+        url: "image/0",
+        type: 'image',
+    };
+    window.viewer.open(src);
+}

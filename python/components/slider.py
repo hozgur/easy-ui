@@ -5,13 +5,10 @@ class Slider(Element):
         self.min = min
         self.max = max
         self.step = step
-        
-        
-    def render(self):
-        class_str = " ".join(self.classes)
-        str = f"<input type='range' id='{self.id}' class='{class_str}' value='{self.value}'"
-        for event_name, action in self.events.items():            
-            if event_name == "change":
-                str += f"on{event_name}='clientEmit(this.id,this.value,\"{event_name}\")'"
-        str += "/>"
-        return str
+        self.tag = "input"
+        self.value_name = "value"
+        self.has_content = False
+        self.attrs["type"] = "range"
+        self.attrs["min"] = self.min
+        self.attrs["max"] = self.max
+        self.attrs["step"] = self.step
