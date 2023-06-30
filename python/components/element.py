@@ -112,7 +112,7 @@ class Element:
             str += f" on{event_name}='clientEmit(this.id,this.{self.value_name},\"{event_name}\")'"
         if self.has_content:
             str +=">"
-            str +=f"{self.value if self.value is not None else ''}"
+            str +=f"{self.value if self.value is not None and self.value_name is not None else ''}"
             for child in self.children:
                 str += child.render()
             str += f"</{self.tag}>"

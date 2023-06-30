@@ -5,9 +5,6 @@ class ImageViewer(Element):
         super().__init__(id, value)
         self.tag = "div"
         self.id = id
-        self.has_content = False
-        self.style("width","100%")
-        self.style("height","500px")
         self.value_name = None
         if id is not None:
             self.id = id

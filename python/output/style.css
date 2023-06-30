@@ -5,8 +5,7 @@ body {
     font-size: 14px;    
     color: #333333;
     margin: 0;
-    padding: 0;    
-    max-width: 960px;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -82,7 +81,6 @@ input {
     margin: 2px;
     background-color: #fff;
     border: #aaa 1px solid;
-    flex-grow: 1;
 }
 
 input:focus {
